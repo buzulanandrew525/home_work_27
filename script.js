@@ -13,7 +13,6 @@ function Carousel(sliderLine) {
     this.step = 0;
 }
 
-
 Carousel.prototype.init = function() {
     this.createElements();
     this.loadImages();
@@ -60,6 +59,8 @@ Carousel.prototype.loadImages = function() {
         img.src = `img/${i + 1}.jpg`;
         img.alt = `img/${i + 1}.jpg`;
         img.className = "slider-item";
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
         this.sliders.push(img);
 
         img.onload = () => {
@@ -70,13 +71,11 @@ Carousel.prototype.loadImages = function() {
                 if(this.showIndicators) {
                     this.createIndicators();
                 }
-                // this.startSlide();
             }
         }
         this.sliderLine.appendChild(img);
     }
 }
-
 
 Carousel.prototype.createIndicators = function() {
     for (let i = 0; i < this.numberOfSlider; i++) {
@@ -127,18 +126,6 @@ Carousel.prototype.pauseSlide = function() {
     this.slideInterval = null;
 }  
 
-
-// Carousel.prototype.startSlide = function() {
-//     if (this.slideInterval) return;
-//     this.slideInterval = setInterval(() => this.showNextSlide(), this.intervalTime);
-// }
-
-// Carousel.prototype.stopSlide = function() {
-//     clearInterval(this.slideInterval);
-//     this.slideInterval = null;
-// }
-
-
 Carousel.prototype.setupEventListeners = function() {
     this.prevButton.addEventListener('click', () => this.showPrevSlide());
     this.nextButton.addEventListener('click', () => this.showNextSlide());
@@ -146,8 +133,41 @@ Carousel.prototype.setupEventListeners = function() {
     this.pauseButton.addEventListener('click', () => this.pauseSlide());
 }
 
+function SwipeCarousel(sliderLine) {
+    Carousel.call(this, sliderLine);
+}
 
-const carousel = new Carousel({
+SwipeCarousel.prototype = Object.create(Carousel.prototype);
+SwipeCarousel.prototype.constructor = SwipeCarousel;
+
+SwipeCarousel.prototype.init = function() {
+    Carousel.prototype.init.call(this);
+    this.setupSwipeListeners();
+}
+
+SwipeCarousel.prototype.setupSwipeListeners = function() {
+    this.container.addEventListener('touchstart', this._swipeStart.bind(this));
+    this.container.addEventListener('mousedown', this._swipeStart.bind(this));
+    this.container.addEventListener('touchend', this._swipeEnd.bind(this));
+    this.container.addEventListener('mouseup', this._swipeEnd.bind(this));
+}
+
+SwipeCarousel.prototype._swipeStart = function(e) {
+    this.startPosX = e instanceof MouseEvent ? e.pageX : e.changedTouches[0].pageX;
+}
+
+SwipeCarousel.prototype._swipeEnd = function(e) {
+    this.endPosX = e instanceof MouseEvent ? e.pageX : e.changedTouches[0].pageX;
+
+    if (this.endPosX - this.startPosX > 100) {
+        this.showPrevSlide();
+    }
+    if (this.endPosX - this.startPosX < -100) {
+        this.showNextSlide();
+    }
+}
+
+const carousel = new SwipeCarousel({
     numberOfSlider: 3,
     intervalTime: 3000,
     showIndicators: true
