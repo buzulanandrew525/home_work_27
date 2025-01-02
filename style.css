@@ -16,17 +16,14 @@
 }
 
 .container {
-    padding: 90px;
-    position: relative;
-    width: 100%;
-    max-width: 50%;
+    padding: 20px;
+    max-width: 90%;
     margin: 0 auto;
     text-align: center;
 }
 
 .slider {
     display: flex;
-    position: relative;
     left: 0;
     transition: transform 0.5s ease-in-out;
     width: 100%;
@@ -34,41 +31,83 @@
 }
 
 .slider-item {
-    width: 100%;
+    flex: 0 0 100%;
     height: auto;
     display: block;
 }
 
 .next,
 .prev,
-.wrapper-slider,
-.indicator {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-
-.next,
-.prev,
 .pause,
 .play {
-    margin: 10px;
-    padding: 5px 20px;
+    display: inline-block;
+    margin: 8px;
+    padding: 5px 15px;
     background-color: #22b914;
+    color: #fff;
     border-radius: 3px;
     border: 1px solid rgb(206, 164, 12);
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.next:hover,
+.prev:hover,
+.pause:hover,
+.play:hover {
+    background-color: #1a8f10;
 }
 
 .indicator {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background-color: #ab1111;
     margin: 0 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.indicator:hover {
+    background-color: #8a0e0e;
 }
 
 .active {
     background-color: #610150;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .next,
+    .prev,
+    .pause,
+    .play {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .next,
+    .prev,
+    .pause,
+    .play {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+
+    .indicator {
+        width: 8px;
+        height: 8px;
+    }
 }

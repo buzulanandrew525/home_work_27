@@ -173,4 +173,20 @@ const carousel = new SwipeCarousel({
     showIndicators: true
 });
 
+Carousel.prototype.updateStep = function() {
+    this.step = this.sliders[0].offsetWidth;
+    this.updateSlider();
+};
+
+Carousel.prototype.setupResizeListener = function() {
+    window.addEventListener('resize', () => this.updateStep());
+};
+
+Carousel.prototype.init = function() {
+    this.createElements();
+    this.loadImages();
+    this.setupEventListeners();
+    this.setupResizeListener(); // Добавляем обработчик изменения размера
+};
+
 carousel.init();
